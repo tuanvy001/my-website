@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Mở Bao Lì Xì</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #ffefd5;
+            margin: 0;
+            padding: 0;
+        }
+        .intro {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            z-index: 1000;
+            animation: fadeOut 2s ease-in-out 3s forwards;
+        }
+        .intro h1 {
+            font-size: 48px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+        .container {
+            margin-top: 50px;
+        }
+        h1 {
+            font-size: 36px;
+            color: #d32f2f;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .red-envelope {
+            width: 150px;
+            height: 220px;
+            background-color: #ff4242;
+            border-radius: 10px;
+            position: relative;
+            display: inline-block;
+            margin: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .red-envelope:hover {
+            transform: scale(1.1);
+        }
+        .red-envelope.disabled {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+        .flap {
+            width: 100%;
+            height: 40px;
+            background-color: #d32f2f;
+            border-radius: 10px 10px 0 0;
+            position: absolute;
+            top: 0;
+        }
+        .fireworks {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .message {
+            display: none;
+            margin-top: 20px;
+            font-size: 24px;
+            color: #333;
+            font-weight: bold;
+        }
+        footer {
+            margin-top: 50px;
+            font-size: 16px;
+            color: #555;
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="intro">
+        <h1>Chào Mừng Đến Với Web Mở Bao Lì Xì! 🎉</h1>
+    </div>
+
+    <div class="container">
+        <h1>Chúc Mừng Năm Mới 2025! 🎉</h1>
+        <div class="red-envelope" onclick="openEnvelope(1)">
+            <div class="flap"></div>
+            <p style="position: absolute; bottom: 10px; width: 100%; color: white; font-weight: bold;">Bao 1</p>
+        </div>
+        <div class="red-envelope" onclick="openEnvelope(2)">
+            <div class="flap"></div>
+            <p style="position: absolute; bottom: 10px; width: 100%; color: white; font-weight: bold;">Bao 2</p>
+        </div>
+        <div class="red-envelope" onclick="openEnvelope(3)">
+            <div class="flap"></div>
+            <p style="position: absolute; bottom: 10px; width: 100%; color: white; font-weight: bold;">Bao 3</p>
+        </div>
+        <div class="red-envelope" onclick="openEnvelope(4)">
+            <div class="flap"></div>
+            <p style="position: absolute; bottom: 10px; width: 100%; color: white; font-weight: bold;">Bao 4</p>
+        </div>
+        <div class="red-envelope" onclick="openEnvelope(5)">
+            <div class="flap"></div>
+            <p style="position: absolute; bottom: 10px; width: 100%; color: white; font-weight: bold;">Bao 5</p>
+        </div>
+        <p class="message" id="message"></p>
+    </div>
+    <canvas class="fireworks"></canvas>
+    <footer>
+        <p>&copy; 2025 - Chúc bạn một năm mới an khang thịnh vượng!</p>
+    </footer>
+
+    <script>
+        let envelopeOpened = false;
+
+        function openEnvelope(id) {
+            if (envelopeOpened) return;
+            envelopeOpened = true;
+
+            const messages = [
+                "Chúc bạn một năm mới An Khang Thịnh Vượng với 100,000 VND!",
+                "Chúc bạn sức khỏe và niềm vui với 200,000 VND!",
+                "Chúc bạn phát tài phát lộc với 500,000 VND!",
+                "Chúc bạn tràn đầy năng lượng với 50,000 VND!",
+                "Chúc bạn vạn sự như ý với 1,000,000 VND!"
+            ];
+
+            const message = document.getElementById('message');
+            message.textContent = `Chúc Mừng Năm Mới! 🎉 ${messages[id - 1]}`;
+            message.style.display = 'block';
+
+            // Disable all envelopes
+            const envelopes = document.querySelectorAll('.red-envelope');
+            envelopes.forEach(env => env.classList.add('disabled'));
+
+            // Trigger fireworks
+            createParticle(window.innerWidth / 2, window.innerHeight / 2);
+        }
+
+        // Fireworks effect
+        const canvas = document.querySelector('.fireworks');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+
+        function createParticle(x, y) {
+            const colors = ['#ff4242', '#ffd700', '#00ff00', '#00bfff', '#ff69b4'];
+            for (let i = 0; i < 50; i++) {
+                particles.push({
+                    x,
+                    y,
+                    dx: (Math.random() - 0.5) * 10,
+                    dy: (Math.random() - 0.5) * 10,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    life: 100
+                });
+            }
+        }
+
+        function updateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, i) => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.fill();
+                p.x += p.dx;
+                p.y += p.dy;
+                p.life--;
+                if (p.life <= 0) particles.splice(i, 1);
+            });
+        }
+
+        function animate() {
+            updateParticles();
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
